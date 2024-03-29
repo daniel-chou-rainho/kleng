@@ -1,9 +1,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/mdn-like.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/cobalt.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/3024-day.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
 
 <!DOCTYPE html>
 <html>
@@ -15,7 +14,7 @@
         }
         .CodeMirror-scroll {
           padding-top: 5%;
-          padding-left: 27%;
+          padding-left: 25%;
         }
         html, body {
           height: 100%;
@@ -32,7 +31,7 @@
     <script>
       var editor = CodeMirror(document.getElementById("editor"), {
         mode: "text",
-        theme: "mdn-like",
+        theme: "material-darker",
         lineNumbers: false
     });
 
@@ -40,7 +39,7 @@
 
     function toggleTheme() {
         var currentTheme = editor.getOption("theme");
-        var newTheme = currentTheme === "mdn-like" ? "cobalt" : "mdn-like";
+        var newTheme = currentTheme === "material-darker" ? "3024-day" : "material-darker";
         editor.setOption("theme", newTheme);
     }
 
