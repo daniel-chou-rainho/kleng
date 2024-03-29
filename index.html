@@ -1,13 +1,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-<!-- Include any additional CodeMirror theme and mode you like -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/mdn-like.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/lucario.min.css">
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simple Writing Site</title>
+    <title>SnapNote</title>
     <style>
         .CodeMirror {
             font-size: 24px;
@@ -27,6 +28,28 @@
 </head>
 <body>
     <div id="editor"></div>
-    <script src="script.js"></script>
+    <script>
+      var editor = CodeMirror(document.getElementById("editor"), {
+        mode:  "javascript",
+        theme: "mdn-like",
+        lineNumbers: false
+    });
+
+    editor.setSize("100%", "100%");
+
+    function toggleTheme() {
+        var currentTheme = editor.getOption("theme");
+        var newTheme = currentTheme === "mdn-like" ? "lucario" : "mdn-like";
+        editor.setOption("theme", newTheme);
+    }
+
+    document.addEventListener("keydown", function(event) {
+        var isCtrlD = (event.ctrlKey || event.metaKey) && event.key === '`';
+        if (isCtrlD) {
+            event.preventDefault();
+            toggleTheme();
+        }
+    });
+    </script>
 </body>
 </html>
