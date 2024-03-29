@@ -3,7 +3,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/mdn-like.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/lucario.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/cobalt.min.css">
 
 <!DOCTYPE html>
 <html>
@@ -14,7 +14,8 @@
             font-size: 24px;
         }
         .CodeMirror-scroll {
-            padding: 100px;
+          padding-top: 5%;
+          padding-left: 27%;
         }
         html, body {
           height: 100%;
@@ -39,7 +40,7 @@
 
     function toggleTheme() {
         var currentTheme = editor.getOption("theme");
-        var newTheme = currentTheme === "mdn-like" ? "lucario" : "mdn-like";
+        var newTheme = currentTheme === "mdn-like" ? "cobalt" : "mdn-like";
         editor.setOption("theme", newTheme);
     }
 
