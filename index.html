@@ -7,35 +7,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SnapNote</title>
-    <style>
-        .CodeMirror {
-          font-size: 24px;
-          max-width: 800px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-        .CodeMirror-scroll {
-          padding: 10%;
-        }
-        html, body {
-          height: 100%;
-          margin: 0;
-        }
-        #editor {
-          width: 100%;
-          height: 100%;
-        }
-      </style>
+  <title>SnapNote</title>
+  <style>
+    .CodeMirror {
+      font-size: 24px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .CodeMirror-scroll {
+      padding: 10%;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    #editor {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
 <body>
   <div id="editor"></div>
   <script>
     var editor = CodeMirror(document.getElementById("editor"), {
-        mode: "text",
-        theme: "material-darker",
-        lineNumbers: false,
-        lineWrapping: true,
+      mode: "text",
+      theme: "material-darker",
+      lineNumbers: false,
+      lineWrapping: true,
     });
 
     editor.setSize("100%", "100%");
@@ -50,16 +50,16 @@
     });
 
     function toggleTheme() {
-        var currentTheme = editor.getOption("theme");
-        var newTheme = currentTheme === "material-darker" ? "3024-day" : "material-darker";
-        editor.setOption("theme", newTheme);
-        updateBackgroundColor(newTheme);
+      var currentTheme = editor.getOption("theme");
+      var newTheme = currentTheme === "material-darker" ? "3024-day" : "material-darker";
+      editor.setOption("theme", newTheme);
+      updateBackgroundColor(newTheme);
     }
 
     function updateBackgroundColor(theme) {
       var backgroundColors = {
-          "material-darker": "#212121",
-          "3024-day": "#f7f7f7"
+        "material-darker": "#212121",
+        "3024-day": "#f7f7f7"
       };
       document.body.style.backgroundColor = backgroundColors[theme] || "white";
     }
@@ -68,11 +68,11 @@
     updateBackgroundColor(editor.getOption("theme"));
 
     document.addEventListener("keydown", function(event) {
-        var isCtrlBacktick  = (event.ctrlKey || event.metaKey) && event.key === '`';
-        if (isCtrlBacktick) {
-            event.preventDefault();
-            toggleTheme();
-        }
+      var isCtrlBacktick  = (event.ctrlKey || event.metaKey) && event.key === '`';
+      if (isCtrlBacktick) {
+        event.preventDefault();
+        toggleTheme();
+      }
     });
   </script>
 </body>
