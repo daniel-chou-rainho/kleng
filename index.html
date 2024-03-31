@@ -10,12 +10,13 @@
     <title>SnapNote</title>
     <style>
         .CodeMirror {
-            font-size: 24px;
+          font-size: 24px;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
         }
         .CodeMirror-scroll {
-          padding-top: 5%;
-          padding-left: 20%;
-          padding-right: 20%;
+          padding: 10%;
         }
         html, body {
           height: 100%;
@@ -28,9 +29,9 @@
       </style>
 </head>
 <body>
-    <div id="editor"></div>
-    <script>
-      var editor = CodeMirror(document.getElementById("editor"), {
+  <div id="editor"></div>
+  <script>
+    var editor = CodeMirror(document.getElementById("editor"), {
         mode: "text",
         theme: "material-darker",
         lineNumbers: false,
@@ -52,7 +53,19 @@
         var currentTheme = editor.getOption("theme");
         var newTheme = currentTheme === "material-darker" ? "3024-day" : "material-darker";
         editor.setOption("theme", newTheme);
+        updateBackgroundColor(newTheme);
     }
+
+    function updateBackgroundColor(theme) {
+      var backgroundColors = {
+          "material-darker": "#212121",
+          "3024-day": "#f7f7f7"
+      };
+      document.body.style.backgroundColor = backgroundColors[theme] || "white";
+    }
+
+    // Initial background color update based on the initial theme
+    updateBackgroundColor(editor.getOption("theme"));
 
     document.addEventListener("keydown", function(event) {
         var isCtrlBacktick  = (event.ctrlKey || event.metaKey) && event.key === '`';
@@ -61,6 +74,6 @@
             toggleTheme();
         }
     });
-    </script>
+  </script>
 </body>
 </html>
