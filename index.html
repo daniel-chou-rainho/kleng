@@ -39,6 +39,15 @@
 
     editor.setSize("100%", "100%");
 
+    var savedContent = localStorage.getItem("editorContent");
+    if (savedContent) {
+      editor.setValue(savedContent);
+    }
+
+    editor.on("change", function() {
+      localStorage.setItem("editorContent", editor.getValue());
+    });
+
     function toggleTheme() {
         var currentTheme = editor.getOption("theme");
         var newTheme = currentTheme === "material-darker" ? "3024-day" : "material-darker";
@@ -46,8 +55,8 @@
     }
 
     document.addEventListener("keydown", function(event) {
-        var isCtrlD = (event.ctrlKey || event.metaKey) && event.key === '`';
-        if (isCtrlD) {
+        var isCtrlBacktick  = (event.ctrlKey || event.metaKey) && event.key === '`';
+        if (isCtrlBacktick) {
             event.preventDefault();
             toggleTheme();
         }
