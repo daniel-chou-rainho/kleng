@@ -1,8 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/3024-day.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/solarized.min.css">
 
 <!DOCTYPE html>
 <html>
@@ -33,7 +32,7 @@
   <script>
     var editor = CodeMirror(document.getElementById("editor"), {
       mode: "text",
-      theme: "material-darker",
+      theme: "solarized dark",
       lineNumbers: false,
       lineWrapping: true,
     });
@@ -51,15 +50,15 @@
 
     function toggleTheme() {
       var currentTheme = editor.getOption("theme");
-      var newTheme = currentTheme === "material-darker" ? "3024-day" : "material-darker";
+      var newTheme = currentTheme === "solarized dark" ? "solarized light" : "solarized dark";
       editor.setOption("theme", newTheme);
       updateBackgroundColor(newTheme);
     }
 
     function updateBackgroundColor(theme) {
       var backgroundColors = {
-        "material-darker": "#212121",
-        "3024-day": "#f7f7f7"
+        "solarized dark": "#002b36",
+        "solarized light": "#fdf6e3"
       };
       document.body.style.backgroundColor = backgroundColors[theme] || "white";
     }
