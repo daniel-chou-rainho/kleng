@@ -67,7 +67,8 @@
 
     document.addEventListener("keydown", function(event) {
       var isCtrlBacktick = (event.ctrlKey || event.metaKey) && event.key === '`';
-      if (isCtrlBacktick) {
+      var isCtrlHash = (event.ctrlKey || event.metaKey) && event.key === '#';
+      if (isCtrlBacktick || isCtrlHash) {
         event.preventDefault();
         toggleTheme();
       }
