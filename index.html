@@ -27,14 +27,14 @@
     </div>
     
     <div class="fixed top-8 left-8 flex flex-col space-y-4">
-        <button id="addNoteBtn" class="bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none transition-colors duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-          </svg>
-      </button>
         <button id="themeToggleBtn" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 p-3 rounded-full shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none transition-colors duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+        <button id="addNoteBtn" class="bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
         </button>
     </div>
@@ -44,18 +44,30 @@
         const addNoteBtn = document.getElementById('addNoteBtn');
         const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-        addNoteBtn.addEventListener('click', addNote);
+        addNoteBtn.addEventListener('click', () => addNote());
         themeToggleBtn.addEventListener('click', toggleTheme);
 
-        function addNote() {
+        // Load saved notes and theme on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNotes();
+            loadTheme();
+        });
+
+        function addNote(content = '') {
+            const noteId = Date.now().toString();
             const noteDiv = document.createElement('div');
             noteDiv.className = 'bg-white dark:bg-dark-note p-4 rounded shadow mb-4 relative transition-colors duration-200';
+            noteDiv.dataset.id = noteId;
             
             const noteContent = document.createElement('textarea');
             noteContent.className = 'w-full p-2 border-none rounded resize-none overflow-hidden focus:outline-none bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-200';
             noteContent.placeholder = 'Enter your note here...';
+            noteContent.value = content;
             noteContent.style.minHeight = '6rem';
-            noteContent.addEventListener('input', autoResize);
+            noteContent.addEventListener('input', () => {
+                autoResize.call(noteContent);
+                saveNotes();
+            });
 
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none';
@@ -66,6 +78,7 @@
             `;
             deleteBtn.onclick = function() {
                 noteContainer.removeChild(noteDiv);
+                saveNotes();
             };
 
             noteDiv.appendChild(noteContent);
@@ -74,6 +87,7 @@
 
             noteDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
             noteContent.focus();
+            autoResize.call(noteContent);
         }
 
         function autoResize() {
@@ -83,6 +97,32 @@
 
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
+            saveTheme();
+        }
+
+        function saveNotes() {
+            const notes = Array.from(noteContainer.children).map(noteDiv => ({
+                id: noteDiv.dataset.id,
+                content: noteDiv.querySelector('textarea').value
+            }));
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+
+        function loadNotes() {
+            const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
+            savedNotes.forEach(note => addNote(note.content));
+        }
+
+        function saveTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
         }
     </script>
 </body>
