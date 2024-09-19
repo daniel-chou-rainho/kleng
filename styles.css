@@ -1,0 +1,127 @@
+:root {
+    --bg-color: #f3f4f6;
+    --note-bg-color: #ffffff;
+    --text-color: #1f2937;
+    --button-bg: #e5e7eb;
+    --button-hover: #d1d5db;
+    --add-note-bg: #3b82f6;
+    --add-note-hover: #2563eb;
+    --delete-hover: #ef4444;
+}
+
+.dark {
+    --bg-color: #1a202c;
+    --note-bg-color: #2d3748;
+    --text-color: #e2e8f0;
+    --button-bg: #4a5568;
+    --button-hover: #718096;
+    --add-note-bg: #3b82f6;
+    --add-note-hover: #2563eb;
+    --delete-hover: #ef4444;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    padding: 2rem;
+    padding-left: 6rem;
+    transition: background-color 0.2s, color 0.2s;
+    font-family: Arial, sans-serif;
+}
+
+.max-w-md {
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fixed-buttons {
+    position: fixed;
+    top: 2rem;
+    left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.theme-toggle-btn, .add-note-btn {
+    padding: 0.75rem;
+    border-radius: 9999px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.theme-toggle-btn {
+    background-color: var(--button-bg);
+    color: var(--text-color);
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--button-hover);
+}
+
+.add-note-btn {
+    background-color: var(--add-note-bg);
+    color: white;
+}
+
+.add-note-btn:hover {
+    background-color: var(--add-note-hover);
+}
+
+.note {
+    background-color: var(--note-bg-color);
+    padding: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    margin-bottom: 1rem;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.note textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    resize: none;
+    overflow: hidden;
+    background-color: transparent;
+    color: var(--text-color);
+    transition: color 0.2s;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.note textarea:focus {
+    outline: none;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: #9ca3af;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s;
+}
+
+.delete-btn:hover {
+    color: var(--delete-hover);
+}
+
+.h-5, .h-6, .w-5, .w-6 {
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+.w-6, .h-6 {
+    height: 1.5rem;
+    width: 1.5rem;
+}

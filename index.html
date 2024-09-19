@@ -4,126 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimal Note-Taking App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            bg: '#1a202c',
-                            note: '#2d3748',
-                        },
-                    },
-                },
-            },
-        }
-    </script>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-100 dark:bg-dark-bg min-h-screen p-8 pl-24 transition-colors duration-200">
+<body>
     <div class="max-w-md mx-auto" id="noteContainer">
         <!-- Notes will be added here -->
     </div>
     
-    <div class="fixed top-8 left-8 flex flex-col space-y-4">
-        <button id="themeToggleBtn" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 p-3 rounded-full shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none transition-colors duration-200">
+    <div class="fixed-buttons">
+        <button id="themeToggleBtn" class="theme-toggle-btn">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             </svg>
         </button>
-        <button id="addNoteBtn" class="bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none transition-colors duration-200">
+        <button id="addNoteBtn" class="add-note-btn">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
         </button>
     </div>
 
-    <script>
-        const noteContainer = document.getElementById('noteContainer');
-        const addNoteBtn = document.getElementById('addNoteBtn');
-        const themeToggleBtn = document.getElementById('themeToggleBtn');
-
-        addNoteBtn.addEventListener('click', () => addNote());
-        themeToggleBtn.addEventListener('click', toggleTheme);
-
-        // Load saved notes and theme on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadNotes();
-            loadTheme();
-        });
-
-        function addNote(content = '') {
-            const noteId = Date.now().toString();
-            const noteDiv = document.createElement('div');
-            noteDiv.className = 'bg-white dark:bg-dark-note p-4 rounded shadow mb-4 relative transition-colors duration-200';
-            noteDiv.dataset.id = noteId;
-            
-            const noteContent = document.createElement('textarea');
-            noteContent.className = 'w-full p-2 border-none rounded resize-none overflow-hidden focus:outline-none bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-200';
-            noteContent.placeholder = 'Enter your note here...';
-            noteContent.value = content;
-            noteContent.style.minHeight = '6rem';
-            noteContent.addEventListener('input', () => {
-                autoResize.call(noteContent);
-                saveNotes();
-            });
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none';
-            deleteBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            `;
-            deleteBtn.onclick = function() {
-                noteContainer.removeChild(noteDiv);
-                saveNotes();
-            };
-
-            noteDiv.appendChild(noteContent);
-            noteDiv.appendChild(deleteBtn);
-            noteContainer.appendChild(noteDiv);
-
-            noteDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            noteContent.focus();
-            autoResize.call(noteContent);
-        }
-
-        function autoResize() {
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
-        }
-
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            saveTheme();
-        }
-
-        function saveNotes() {
-            const notes = Array.from(noteContainer.children).map(noteDiv => ({
-                id: noteDiv.dataset.id,
-                content: noteDiv.querySelector('textarea').value
-            }));
-            localStorage.setItem('notes', JSON.stringify(notes));
-        }
-
-        function loadNotes() {
-            const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
-            savedNotes.forEach(note => addNote(note.content));
-        }
-
-        function saveTheme() {
-            const isDark = document.documentElement.classList.contains('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        }
-
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
