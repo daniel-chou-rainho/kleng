@@ -1,10 +1,13 @@
 const noteContainer = document.getElementById('noteContainer');
 
+let sortable; // Declare sortable variable to store the Sortable instance
+
 // Load saved notes and theme on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadNotes();
     ensureEmptyNote();
     loadTheme();
+    initSortable(); // Initialize Sortable
 });
 
 // Add event listener for the Ctrl + ` keyboard shortcut
@@ -42,6 +45,11 @@ function addNote(content = '', id = null) {
     noteContainer.appendChild(noteDiv);
 
     autoResize.call(noteContent);
+
+    // Refresh Sortable when a new note is added
+    if (sortable) {
+        sortable.option("disabled", false); // Enable sorting
+    }
 }
 
 function ensureEmptyNote() {
@@ -88,4 +96,18 @@ function loadTheme() {
     if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
     }
+}
+
+// Initialize Sortable
+function initSortable() {
+    sortable = new Sortable(noteContainer, {
+        animation: 150, // Animation speed in ms
+        ghostClass: 'note-ghost', // Class name for the drop placeholder
+        chosenClass: 'note-chosen', // Class name for the chosen item
+        dragClass: 'note-drag', // Class name for the dragging item
+        handle: '.note', // Drag handle selector within list items
+        onEnd: function() {
+            saveNotes(); // Save the new order when dragging ends
+        },
+    });
 }
