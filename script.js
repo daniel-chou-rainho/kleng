@@ -5,10 +5,10 @@ const themeToggleBtn = document.getElementById('themeToggleBtn');
 addNoteBtn.addEventListener('click', () => addNote());
 themeToggleBtn.addEventListener('click', toggleTheme);
 
-// Load saved notes and theme on page load
+// Load saved notes on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadNotes();
-    loadTheme();
+    // We don't need to call loadTheme() here anymore
 });
 
 function addNote(content = '') {
@@ -71,11 +71,4 @@ function loadNotes() {
 function saveTheme() {
     const isDark = document.documentElement.classList.contains('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-}
-
-function loadTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
-    }
 }
