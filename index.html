@@ -1,78 +1,64 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/solarized.min.css">
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>kleng</title>
-  <style>
-    .CodeMirror {
-      font-size: 24px;
-    }
-    .CodeMirror-scroll {
-      padding-top: 5%;
-      padding-left: 10%;
-      padding-right: 10%;
-    }
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-    #editor {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Note-Taking App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div id="editor"></div>
-  <script>
-    var editor = CodeMirror(document.getElementById("editor"), {
-      mode: "text",
-      theme: "solarized dark",
-      lineNumbers: false,
-      lineWrapping: true,
-    });
+<body class="bg-gray-100 min-h-screen p-8 pb-20">
+    <div class="max-w-md mx-auto" id="noteContainer">
+        <!-- Notes will be added here -->
+    </div>
+    
+    <button id="addNoteBtn" class="fixed bottom-8 right-8 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+    </button>
 
-    editor.setSize("100%", "100%");
+    <script>
+        const noteContainer = document.getElementById('noteContainer');
+        const addNoteBtn = document.getElementById('addNoteBtn');
 
-    var savedContent = localStorage.getItem("editorContent");
-    if (savedContent) {
-      editor.setValue(savedContent);
-    }
+        addNoteBtn.addEventListener('click', addNote);
 
-    editor.on("change", function() {
-      localStorage.setItem("editorContent", editor.getValue());
-    });
+        function addNote() {
+            const noteDiv = document.createElement('div');
+            noteDiv.className = 'bg-white p-4 rounded shadow mb-4 relative';
+            
+            const noteContent = document.createElement('textarea');
+            noteContent.className = 'w-full p-2 border-none rounded resize-none overflow-hidden focus:outline-none';
+            noteContent.placeholder = 'Enter your note here...';
+            noteContent.style.minHeight = '6rem';
+            noteContent.addEventListener('input', autoResize);
 
-    function toggleTheme() {
-      var currentTheme = editor.getOption("theme");
-      var newTheme = currentTheme === "solarized dark" ? "solarized light" : "solarized dark";
-      editor.setOption("theme", newTheme);
-      updateBackgroundColor(newTheme);
-    }
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'absolute top-2 right-2 text-gray-400 hover:text-red-500 focus:outline-none';
+            deleteBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            `;
+            deleteBtn.onclick = function() {
+                noteContainer.removeChild(noteDiv);
+            };
 
-    function updateBackgroundColor(theme) {
-      var backgroundColors = {
-        "solarized dark": "#002b36",
-        "solarized light": "#fdf6e3"
-      };
-      document.body.style.backgroundColor = backgroundColors[theme] || "white";
-    }
+            noteDiv.appendChild(noteContent);
+            noteDiv.appendChild(deleteBtn);
+            noteContainer.appendChild(noteDiv);
 
-    // Initial background color update based on the initial theme
-    updateBackgroundColor(editor.getOption("theme"));
+            // Scroll to the new note
+            noteDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Focus on the new textarea
+            noteContent.focus();
+        }
 
-    document.addEventListener("keydown", function(event) {
-      var isCtrlBacktick = (event.ctrlKey || event.metaKey) && event.key === '`';
-      var isCtrlHash = (event.ctrlKey || event.metaKey) && event.key === '#';
-      if (isCtrlBacktick || isCtrlHash) {
-        event.preventDefault();
-        toggleTheme();
-      }
-    });
-  </script>
+        function autoResize() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        }
+    </script>
 </body>
 </html>
