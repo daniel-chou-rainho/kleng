@@ -1,12 +1,18 @@
 const noteContainer = document.getElementById('noteContainer');
-const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-themeToggleBtn.addEventListener('click', toggleTheme);
-
-// Load saved notes on page load
+// Load saved notes and theme on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadNotes();
     ensureEmptyNote();
+    loadTheme();
+});
+
+// Add event listener for the Ctrl + ` keyboard shortcut
+document.addEventListener('keydown', (event) => {
+    if (event.ctrlKey && event.key === '`') {
+        event.preventDefault(); // Prevent the default action
+        toggleTheme();
+    }
 });
 
 function addNote(content = '', id = null) {
@@ -75,4 +81,11 @@ function loadNotes() {
 function saveTheme() {
     const isDark = document.documentElement.classList.contains('dark');
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+    }
 }
