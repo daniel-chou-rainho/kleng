@@ -42,8 +42,6 @@ function addNote(content = '') {
     noteDiv.appendChild(deleteBtn);
     noteContainer.appendChild(noteDiv);
 
-    noteDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    noteContent.focus();
     autoResize.call(noteContent);
 }
 
