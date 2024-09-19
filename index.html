@@ -1,34 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimal Note-Taking App</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#1a202c',
+                            note: '#2d3748',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
 </head>
-<body class="bg-gray-100 min-h-screen p-8 pb-20">
+<body class="bg-gray-100 dark:bg-dark-bg min-h-screen p-8 pl-24 transition-colors duration-200">
     <div class="max-w-md mx-auto" id="noteContainer">
         <!-- Notes will be added here -->
     </div>
     
-    <button id="addNoteBtn" class="fixed bottom-8 right-8 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-    </button>
+    <div class="fixed top-8 left-8 flex flex-col space-y-4">
+        <button id="addNoteBtn" class="bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+      </button>
+        <button id="themeToggleBtn" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 p-3 rounded-full shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+        </button>
+    </div>
 
     <script>
         const noteContainer = document.getElementById('noteContainer');
         const addNoteBtn = document.getElementById('addNoteBtn');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
 
         addNoteBtn.addEventListener('click', addNote);
+        themeToggleBtn.addEventListener('click', toggleTheme);
 
         function addNote() {
             const noteDiv = document.createElement('div');
-            noteDiv.className = 'bg-white p-4 rounded shadow mb-4 relative';
+            noteDiv.className = 'bg-white dark:bg-dark-note p-4 rounded shadow mb-4 relative transition-colors duration-200';
             
             const noteContent = document.createElement('textarea');
-            noteContent.className = 'w-full p-2 border-none rounded resize-none overflow-hidden focus:outline-none';
+            noteContent.className = 'w-full p-2 border-none rounded resize-none overflow-hidden focus:outline-none bg-transparent text-gray-800 dark:text-gray-200 transition-colors duration-200';
             noteContent.placeholder = 'Enter your note here...';
             noteContent.style.minHeight = '6rem';
             noteContent.addEventListener('input', autoResize);
@@ -48,16 +72,17 @@
             noteDiv.appendChild(deleteBtn);
             noteContainer.appendChild(noteDiv);
 
-            // Scroll to the new note
             noteDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            
-            // Focus on the new textarea
             noteContent.focus();
         }
 
         function autoResize() {
             this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
+        }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
         }
     </script>
 </body>

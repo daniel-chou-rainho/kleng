@@ -1,1 +1,1 @@
-[kleng](https://daniel-chou-rainho.github.io/kleng/) is a minimal online writing pad designed for quick, temporary note-taking. Inspired by the simplicity of [zenpen.io](https://zenpen.io), kleng offers an enhanced writing experience by integrating familiar IDE shortcuts, courtesy of [CodeMirror](https://codemirror.net/).
+Minimal note-taking website.
