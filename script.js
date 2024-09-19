@@ -6,7 +6,7 @@ themeToggleBtn.addEventListener('click', toggleTheme);
 // Load saved notes on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadNotes();
-    addEmptyNote();
+    ensureEmptyNote();
 });
 
 function addNote(content = '', id = null) {
@@ -16,44 +16,35 @@ function addNote(content = '', id = null) {
     noteDiv.dataset.id = noteId;
     
     const noteContent = document.createElement('textarea');
-    noteContent.placeholder = 'Enter your note here...';
     noteContent.value = content;
     noteContent.style.minHeight = '6rem';
     noteContent.addEventListener('input', () => {
         autoResize.call(noteContent);
         saveNotes();
-        if (noteDiv === noteContainer.lastElementChild) {
-            addEmptyNote();
+        ensureEmptyNote();
+    });
+
+    noteContent.addEventListener('blur', () => {
+        if (noteContent.value.trim() === '') {
+            noteContainer.removeChild(noteDiv);
+            saveNotes();
+            ensureEmptyNote();
         }
     });
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.className = 'delete-btn';
-    deleteBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-    `;
-    deleteBtn.onclick = function() {
-        noteContainer.removeChild(noteDiv);
-        saveNotes();
-        if (noteContainer.children.length === 0) {
-            addEmptyNote();
-        }
-    };
-
     noteDiv.appendChild(noteContent);
-    noteDiv.appendChild(deleteBtn);
     noteContainer.appendChild(noteDiv);
 
     autoResize.call(noteContent);
 }
 
-function addEmptyNote() {
-    if (noteContainer.lastElementChild && noteContainer.lastElementChild.querySelector('textarea').value === '') {
-        return; // Don't add a new empty note if the last one is already empty
+function ensureEmptyNote() {
+    const notes = noteContainer.children;
+    const lastNote = notes[notes.length - 1];
+    
+    if (!lastNote || lastNote.querySelector('textarea').value.trim() !== '') {
+        addNote();
     }
-    addNote();
 }
 
 function autoResize() {
@@ -72,7 +63,7 @@ function saveNotes() {
             id: noteDiv.dataset.id,
             content: noteDiv.querySelector('textarea').value
         }))
-        .filter(note => note.content !== ''); // Don't save empty notes
+        .filter(note => note.content.trim() !== ''); // Don't save empty notes
     localStorage.setItem('notes', JSON.stringify(notes));
 }
 
