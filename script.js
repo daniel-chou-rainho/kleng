@@ -1,18 +1,16 @@
 const noteContainer = document.getElementById('noteContainer');
-const addNoteBtn = document.getElementById('addNoteBtn');
 const themeToggleBtn = document.getElementById('themeToggleBtn');
 
-addNoteBtn.addEventListener('click', () => addNote());
 themeToggleBtn.addEventListener('click', toggleTheme);
 
 // Load saved notes on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadNotes();
-    // We don't need to call loadTheme() here anymore
+    addEmptyNote();
 });
 
-function addNote(content = '') {
-    const noteId = Date.now().toString();
+function addNote(content = '', id = null) {
+    const noteId = id || Date.now().toString();
     const noteDiv = document.createElement('div');
     noteDiv.className = 'note';
     noteDiv.dataset.id = noteId;
@@ -24,6 +22,9 @@ function addNote(content = '') {
     noteContent.addEventListener('input', () => {
         autoResize.call(noteContent);
         saveNotes();
+        if (noteDiv === noteContainer.lastElementChild) {
+            addEmptyNote();
+        }
     });
 
     const deleteBtn = document.createElement('button');
@@ -36,6 +37,9 @@ function addNote(content = '') {
     deleteBtn.onclick = function() {
         noteContainer.removeChild(noteDiv);
         saveNotes();
+        if (noteContainer.children.length === 0) {
+            addEmptyNote();
+        }
     };
 
     noteDiv.appendChild(noteContent);
@@ -43,6 +47,13 @@ function addNote(content = '') {
     noteContainer.appendChild(noteDiv);
 
     autoResize.call(noteContent);
+}
+
+function addEmptyNote() {
+    if (noteContainer.lastElementChild && noteContainer.lastElementChild.querySelector('textarea').value === '') {
+        return; // Don't add a new empty note if the last one is already empty
+    }
+    addNote();
 }
 
 function autoResize() {
@@ -56,16 +67,18 @@ function toggleTheme() {
 }
 
 function saveNotes() {
-    const notes = Array.from(noteContainer.children).map(noteDiv => ({
-        id: noteDiv.dataset.id,
-        content: noteDiv.querySelector('textarea').value
-    }));
+    const notes = Array.from(noteContainer.children)
+        .map(noteDiv => ({
+            id: noteDiv.dataset.id,
+            content: noteDiv.querySelector('textarea').value
+        }))
+        .filter(note => note.content !== ''); // Don't save empty notes
     localStorage.setItem('notes', JSON.stringify(notes));
 }
 
 function loadNotes() {
     const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
-    savedNotes.forEach(note => addNote(note.content));
+    savedNotes.forEach(note => addNote(note.content, note.id));
 }
 
 function saveTheme() {
